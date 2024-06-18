@@ -1,0 +1,37 @@
+name: Filter JSON Values
+ 
+on:
+  workflow_dispatch:
+ 
+
+jobs:
+  copy_files:
+    runs-on: ubuntu-latest
+    #env:
+      #clientfile: "./job_dependencies/job_dependencies.json"
+    outputs:
+      component: ${{ steps.set-matrix.outputs.FILTERED_VALUE }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3  
+      - name: Copy Job Dependencies
+        run: |
+          mkdir -p job_dependencies  
+          cp .github/job_dependencies.json job_dependencies/  
+      - name: Listing the directory
+        run: ls -R 
+      - name: List Job Dependencies
+        run: |
+           cat job_dependencies/job_dependencies.json
+      - name: Set matrix data
+        id: set-matrix
+        run: |
+          FILTERED_VALUE=$(jq -r .name job_dependencies/job_dependencies.json)
+          echo "Filtered value: $FILTERED_VALUE"
+     
+          FILTERED_VALUE1=$(jq -r .age job_dependencies/job_dependencies.json)
+          echo "Filtered value: $FILTERED_VALUE1"
+          echo "$component"
+     
+  
+        
