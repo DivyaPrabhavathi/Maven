@@ -1,2 +1,15 @@
 name: Build Workflow
 on: workflow_dispatch
+jobs:
+  Build_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: action/checkout@v3
+    - name: set up JDK 11
+    - uses: action/setup-java@v3
+      with:
+        java-verion: '11'
+    - name: Build with maven
+      run: maven -B package --file pom.xml
+    
+    
