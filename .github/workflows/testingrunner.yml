@@ -4,6 +4,6 @@ jobs:
   runner_test:
     runs-on: self-hosted
     steps:
-      - uses: action/checkout@v3
+      #- uses: action/checkout@v3
       - name: Checking the runner
         run: echo "The runner is working correctly"
