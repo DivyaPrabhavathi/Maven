@@ -6,6 +6,7 @@ jobs:
   job1:
     runs-on: self-hosted
     steps:
+     - uses: actions/checkout@v3
     
      - name: check the runner is working
        run: echo "THe runner is working"
