@@ -5,9 +5,5 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: action/checkout@v3
-      - name: set up JDK 11
-      - uses: action/setup-java@v3
-        with:
-          java-verion: '11'
-      - name: Build with maven
-        run: maven -B package --file pom.xml
+      - name: Checking the runner
+        run: echo "The runner is working correctly"
