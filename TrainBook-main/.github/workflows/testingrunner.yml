@@ -4,7 +4,7 @@ on:
 
 Job:
   job1:
-  runs-on: self-hosted runner
+  runs-on: self-hosted
    steps:
     
      - name: check the runner is working
