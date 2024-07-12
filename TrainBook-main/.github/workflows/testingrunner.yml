@@ -2,10 +2,10 @@ name: Testing the runner
 on: 
   Workflow_dispatch:
 
-Job:
+job:
   job1:
   runs-on: self-hosted
-   steps:
+  steps:
     
      - name: check the runner is working
        run: echo "THe runner is working"
