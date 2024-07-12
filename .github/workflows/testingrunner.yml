@@ -14,4 +14,6 @@ jobs:
       - name: Teams notification
         uses: neonidian/teams-notify-build-status@v3
         with:
+          webhookUrl: https://teams.microsoft.com/l/channel/19%3A25933192783a428887f2f7f4d2fb4c93%40thread.tacv2/Trainee%20-%20DevOps?groupId=466cac58-5a53-4ab7-ad3c-46a1c2b154e2&tenantId=&ngc=true
+          
         
