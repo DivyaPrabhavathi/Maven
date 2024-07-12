@@ -1,12 +1,13 @@
-name: Testing the runner
-on: 
-  Workflow_dispatch:
-
+name: testingrunner Workflow
+on: workflow_dispatch
 jobs:
-  job1:
+  runner_test:
     runs-on: self-hosted
     steps:
-     - uses: actions/checkout@v3
-    
-     - name: check the runner is working
-       run: echo "THe runner is working"
+      - uses: action/checkout@v3
+      - name: set up JDK 11
+      - uses: action/setup-java@v3
+        with:
+          java-verion: '11'
+      - name: Build with maven
+        run: maven -B package --file pom.xml
