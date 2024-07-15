@@ -45,22 +45,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: mspriya92/java-web-app:latest
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Pull Tomcat image
-        run: docker pull tomcat:latest  # Or another Windows-compatible image (adjust tag if needed)
-     
-      - name: Run Tomcat container
-        run: docker run -d -p 8080:8080 bitnami/tomcat:latest  # Detached mode (-d), expose port
-
-      - name: Pull your application image (assuming image push was successful in a previous step)
-        run: docker pull mspriya92/java-web-app:latest
-       
-      - name: Run your application container
-        #run: docker run -d -p 8081:8080 mspriya92/java-web-app:latest  # Detached mode (-d), map port (adjust if needed)
-        #run: docker run -d -p 8080:8080 -v mspriya92/java-web-app:latest:/usr/local/tomcat/webapps bitnami/tomcat:latest
-        run: docker run -d -p 8080:8080 -v java-web-app:/usr/local/tomcat/webapps bitnami/tomcat:latest
-     
+          tags: divyaprabhavathi1012/javacode
