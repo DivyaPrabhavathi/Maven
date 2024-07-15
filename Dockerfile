@@ -4,7 +4,7 @@ FROM openjdk:17
 WORKDIR /app
 
 # Copy source code
-COPY . /app
+COPY staging/*.war /app/ROOT.war
 
 # Build with Maven
 RUN mvn clean install
