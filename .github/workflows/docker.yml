@@ -23,7 +23,7 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: divyaprabhavathi1012/javacode
-        file: .docker/Dockerfile  # Path to your Dockerfile
+        file: ./docker  # Path to your Dockerfile
         push: true
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
