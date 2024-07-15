@@ -1,0 +1,15 @@
+FROM openjdk:17-slim  # Base image with OpenJDK 17
+
+WORKDIR /app  # Working directory inside the container
+
+# Copy your Java source code (adjust based on your project structure)
+COPY . /app
+
+# Build the project using Maven (adjust the command if needed)
+RUN mvn clean install -DskipTests
+
+# Expose the port for your application (if required)
+EXPOSE 8080  # Example for a web application
+
+# Set the startup command (replace with your application's entry point)
+CMD ["java", "-jar", "your-app.jar"]  # Example for a JAR application
