@@ -25,6 +25,5 @@ jobs:
         image: divyaprabhavathi1012/javacode
         tags: latest
         registry: docker.io
-        dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
