@@ -23,16 +23,5 @@ jobs:
      with:
       name: Package
       path: staging
-   - name: Set up Docker Buildx
-     uses: docker/setup-buildx-action@v1
-   - name: Build & push Docker image
-     uses: mr-smithers-excellent/docker-build-push@v4
-     with:
-        image: divyaprabhavathi1012/javacode
-        file: ./DockerFile  # Path to your Dockerfile
-        push: true
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
+   
 
