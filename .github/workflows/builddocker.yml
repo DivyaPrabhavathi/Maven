@@ -41,6 +41,6 @@ jobs:
       - name: Build and push Docker image
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: divyaprabhavathi1012/javacode:java  # Replace with your details
+          image: divyaprabhavathi1012/javacode  # Replace with your details
           file: ./Dockerfile
           push: true
