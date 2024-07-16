@@ -12,8 +12,9 @@ jobs:
     steps:
       - name: checking the JSON value
         id: set-value
+        working-directory: ./job_dependencies
         run: | 
-          echo "result=`perl -pe 's/\s+//g' NSI.json`" >> $GITHUB_OUTPUT
+          echo "result=`perl -pe 's/\s+//g' nsivalue.json`" >> $GITHUB_OUTPUT
           echo "$resulting"
 
     
