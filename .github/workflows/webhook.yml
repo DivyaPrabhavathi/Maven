@@ -15,7 +15,22 @@ jobs:
         working-directory: ./job_dependencies
         run: | 
           echo "result=`perl -pe 's/\s+//g' nsivalue.json`" >> $GITHUB_OUTPUT
-          echo "$resulting"
+
+
+  job2:
+      runs-on: ubuntu-latest
+      needs: JSONvalue
+      continue-on-error: true
+      strategy:
+        matrix:
+           results: ${{ fronJSON(needs.JSONvalue.outputs.resulting) }}
+        fail-fast: false
+     
+      steps:
+          - name: checkin ght evalue
+            run: echo "$matrix.results"
+  
+      
 
     
    
