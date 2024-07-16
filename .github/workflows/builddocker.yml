@@ -16,7 +16,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker run ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${{ secrets.DOCKERHUB_IMAGE_TAG }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${{ secrets.DOCKERHUB_IMAGE_TAG }}
 
       - name: Run the image (or deploy to service)
         run: |
