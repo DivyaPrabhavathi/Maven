@@ -23,7 +23,7 @@ jobs:
       continue-on-error: true
       strategy:
         matrix:
-           results: ${{ fronJSON(needs.JSONvalue.outputs.resulting) }}
+           results: ${{ fromJSON(needs.JSONvalue.outputs.resulting) }}
         fail-fast: false
      
       steps:
