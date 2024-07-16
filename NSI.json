@@ -1,4 +1,4 @@
 {
-   "PASSWORD": "<password>",
-   "USERNAME": "<username>"
+   "PASSWORD": "<DOCKER_PASSWORD>",
+   "USERNAME": "<DOCKER_USERNAME>"
 }
