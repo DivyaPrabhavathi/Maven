@@ -1,8 +1,7 @@
 name: Deploy to Windows Server
 
 on:
-  push:
-    branches: [ main ]  # Replace with your desired branch
+ workflow_dispatch:  # Replace with your desired branch
 
 jobs:
   deploy:
