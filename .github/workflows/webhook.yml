@@ -4,12 +4,18 @@ on:
     
 
 jobs:
-  printJob:
+  JSONvalue:
     name: Print event
     runs-on: ubuntu-latest
+    outputs:
+     resulting: ${{ steps.set-value.outputs.result }}
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
+      - name: checking the JSON value
+        id: set-value
+        run: | 
+          echo "result='perl -pe 's/\s+//g' NSI.json`" >> $GITHUB_OUTPUT
+          echo "$resulting"
+
+    
+   
+        
