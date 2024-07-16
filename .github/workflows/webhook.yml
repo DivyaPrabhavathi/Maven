@@ -13,7 +13,7 @@ jobs:
       - name: checking the JSON value
         id: set-value
         run: | 
-          echo "result='perl -pe 's/\s+//g' NSI.json`" >> $GITHUB_OUTPUT
+          echo "result=`perl -pe 's/\s+//g' NSI.json`" >> $GITHUB_OUTPUT
           echo "$resulting"
 
     
