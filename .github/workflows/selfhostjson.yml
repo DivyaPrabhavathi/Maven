@@ -14,13 +14,14 @@ jobs:
         shell: powershell
 
       - name: assign the value to the json file
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
          # Read JSON file
           $json = Get-Content NSI.json -Raw | ConvertFrom-Json
-          $DOCKER_USERNAME = ${{ secrets.DOCKER_USERNAME }}
-          $DOCKER_PASSWORD = ${{ secrets.DOCKER_PASSWORD }}
-          $json.USERNAME = $DOCKER_USERNAME
-          $json.PASSWORD = $DOCKER_PASSWORD
+          $json.USERNAME = "$env:DOCKER_USERNAME"
+          $json.PASSWORD = "env:$DOCKER_PASSWORD"
           $json | ConvertTo-Json | Set-Content -Path NSI.json 
         shell: powershell
 
