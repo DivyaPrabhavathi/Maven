@@ -17,10 +17,10 @@ jobs:
         run: |
          # Read JSON file
           $json = Get-Content NSI.json -Raw | ConvertFrom-Json
-          $Password = ${{ secrets.DOCKER_USERNAME }}
-          $Username = ${{ secrets.DOCKER_PASSWORD }}
-          $json.Password = $Password
-          $json.Username = $Username
+          $DOCKER_USERNAME = ${{ secrets.DOCKER_USERNAME }}
+          $DOCKER_PASSWORD = ${{ secrets.DOCKER_PASSWORD }}
+          $json.Password = $DOCKER_USERNAME
+          $json.Username = $DOCKER_PASSWORD
           $jsonContent | ConvertTo-Json | Set-Content -Path NSI.json -Force
         shell: powershell
 
