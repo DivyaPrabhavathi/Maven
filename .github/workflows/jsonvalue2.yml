@@ -14,8 +14,8 @@ jobs:
       - name: Print initial nsi.json content
         run: |
           echo "Initial nsi.json content:"
-          if (Test-Path nsi.json) {
-            Get-Content nsi.json
+          if (Test-Path NSI.json) {
+            Get-Content NSI.json
           } else {
             Write-Host "nsi.json does not exist in the repository."
           }
@@ -24,13 +24,13 @@ jobs:
       - name: Download nsi.json from external source
         run: |
           echo "Downloading nsi.json from external source"
-          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json" -OutFile "jsonvalue.json"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
         shell: powershell
  
       - name: Print downloaded nsi.json content
         run: |
           echo "Downloaded nsi.json content:"
-          Get-Content nsi.json
+          Get-Content NSI.json
         shell: powershell
  
       - name: Update nsi.json with secrets
@@ -39,14 +39,14 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "Updating nsi.json with secrets"
-          $json = Get-Content nsi.json -Raw | ConvertFrom-Json
-          $json.secret1 = "$env:DOCKER_USERNAME"
-          $json.secret2 = "$env:DOCKER_PASSWORD"
-          $json | ConvertTo-Json | Set-Content -Path jsonvalue.json
+          $json = Get-Content NSI.json -Raw | ConvertFrom-Json
+          $json.PASSWORD = "$env:DOCKER_USERNAME"
+          $json.USERNAME = "$env:DOCKER_PASSWORD"
+          $json | ConvertTo-Json | Set-Content -Path NSI.json
         shell: powershell
  
       - name: Print updated nsi.json content
         run: |
           echo "Updated nsi.json content:"
-          Get-Content nsi.json
+          Get-Content NSI.json
         shell: powershell
