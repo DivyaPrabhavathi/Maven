@@ -1,37 +1,33 @@
-name: webhook
+name: JSON secret
+ 
 on:
   workflow_dispatch:
-    
-
 jobs:
-  JSONvalue:
-    name: Print event
+  update-json:
     runs-on: ubuntu-latest
-    outputs:
-     resulting: ${{ steps.set-value.outputs.result }}
+ 
     steps:
-      - name: checking the JSON value
-        id: set-value
-        working-directory: ./job_dependencies
-        run: | 
-          echo "result=`perl -pe 's/\s+//g' nsivalue.json`" >> $GITHUB_OUTPUT
-
-
-  job2:
-      runs-on: ubuntu-latest
-      needs: JSONvalue
-      continue-on-error: true
-      strategy:
-        matrix:
-           results: ${{ fromJSON(needs.JSONvalue.outputs.resulting) }}
-        fail-fast: false
-     
-      steps:
-          - name: checkin ght evalue
-            run: echo "$matrix.results"
-  
-      
-
-    
-   
-        
+      - name: Checkout repository
+        uses: actions/checkout@v2
+ 
+      - name: Set secret value in JSON
+        run: |
+          # Set the secret value as an environment variable
+          echo "::set-env name=SECRET_VALUE::${{ secrets.DOCKER_USERNAME }}"
+          
+          # Read the current content of the JSON file
+          json_content=$(cat path/to/your-file.json)
+          
+          # Update the JSON file with the secret value
+          updated_json=$(echo "$json_content" | jq '.yourKey = env.DOCKER_USERNAME')
+ 
+          # Write the updated content back to the JSON file
+          echo "$updated_json" > job_dependencies/job_dependencies.json
+ 
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add job_dependencies/job_dependencies.json
+          git commit -m "Update JSON with secret value"
+          git push
