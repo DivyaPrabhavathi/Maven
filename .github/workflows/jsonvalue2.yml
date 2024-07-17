@@ -1,32 +1,52 @@
-name: Update JSON with Secrets
+name: SphereJsonUpdateNew
  
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
  
 jobs:
   update-json:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  
  
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
  
-    - name: Update JSON file with secrets
-      env:
-        MY_SECRET: ${{ secrets.DOCKER_USERNAME }}
-      run: |
-        # Path to your JSON file
-        JSON_FILE="job_dependencies/jsonvalue.json"
-        
-        # Use sed to update the JSON file with the secret value
-        sed -i 's/"secret1": "[^"]*"/"secret1": "'"$MY_SECRET"'"/' $JSON_FILE
+      - name: Print initial nsi.json content
+        run: |
+          echo "Initial nsi.json content:"
+          if (Test-Path nsi.json) {
+            Get-Content nsi.json
+          } else {
+            Write-Host "nsi.json does not exist in the repository."
+          }
+        shell: powershell
  
-    - name: Commit and push changes
-      run: |
-         git config --global user.name 'github-actions[bot]'
-         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-         git add path/to/your/file.json
-         git commit -m "Update JSON file with secret values"
-         git push
+      - name: Download nsi.json from external source
+        run: |
+          echo "Downloading nsi.json from external source"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json" -OutFile "nsi.json"
+        shell: powershell
+ 
+      - name: Print downloaded nsi.json content
+        run: |
+          echo "Downloaded nsi.json content:"
+          Get-Content nsi.json
+        shell: powershell
+ 
+      - name: Update nsi.json with secrets
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "Updating nsi.json with secrets"
+          $json = Get-Content nsi.json -Raw | ConvertFrom-Json
+          $json.DockerUsername = "$env:DOCKER_USERNAME"
+          $json.DockerPassword = "$env:DOCKER_PASSWORD"
+          $json | ConvertTo-Json | Set-Content -Path nsi.json
+        shell: powershell
+ 
+      - name: Print updated nsi.json content
+        run: |
+          echo "Updated nsi.json content:"
+          Get-Content nsi.json
+        shell: powershell
