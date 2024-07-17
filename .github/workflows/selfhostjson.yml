@@ -9,5 +9,5 @@ jobs:
 
     steps:
       - name: Download JSON file
-        run: curl -L https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json -o C:\Sphere
+        run: curl -o https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json -o C:\Sphere
 
