@@ -14,17 +14,17 @@ jobs:
       - name: Set secret values in JSON
         run: |
           # Read the current content of the JSON file
-          json_content=$(cat job_dependencies/job_dependencies.json)
+          json_content=$(cat job_dependencies/nsivalue.json)
           
           # Update the JSON file with the secret values
           updated_json=$(echo "$json_content" | jq \
-            --arg secret1 "${{ secrets.DOCKER_USERNAME }}" \
-            --arg secret2 "${{ secrets.DOCKER_PASSWORD }}" \
+            --arg PASSWORD "${{ secrets.DOCKER_USERNAME }}" \
+            --arg USERNAME "${{ secrets.DOCKER_PASSWORD }}" \
             
-            '.key1 = $secret1 | .key3 = $secret2')
+            '.key1 = $PASSWORD | .key3 = $USERNAME')
  
           # Write the updated content back to the JSON file
-          echo "$updated_json" > job_dependencies/job_dependencies.json
+          echo "$updated_json" > job_dependencies/nsivalue.json
  
       - name: Commit and push changes
         run: |
