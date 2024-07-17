@@ -9,5 +9,5 @@ jobs:
 
     steps:
       - name: Download JSON file
-        run: wget -O  result.json https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json 
+        run: wget -O  C:\Sphere\result.json https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json 
 
