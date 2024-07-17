@@ -1,6 +1,7 @@
 name: Update JSON file with secrets and variables
  
-on: [push]
+on: 
+ workflow_dispatch:
  
 jobs:
   update-json:
