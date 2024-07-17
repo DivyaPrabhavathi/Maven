@@ -19,8 +19,8 @@ jobs:
           $json = Get-Content NSI.json -Raw | ConvertFrom-Json
           $DOCKER_USERNAME = ${{ secrets.DOCKER_USERNAME }}
           $DOCKER_PASSWORD = ${{ secrets.DOCKER_PASSWORD }}
-          $json.Password = $DOCKER_USERNAME
-          $json.Username = $DOCKER_PASSWORD
-          $json | ConvertTo-Json | Set-Content -Path NSI.json -Force
+          $json.USERNAME = $DOCKER_USERNAME
+          $json.PASSWORD = $DOCKER_PASSWORD
+          $json | ConvertTo-Json | Set-Content -Path NSI.json 
         shell: powershell
 
