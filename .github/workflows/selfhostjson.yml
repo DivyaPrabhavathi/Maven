@@ -21,6 +21,6 @@ jobs:
           $DOCKER_PASSWORD = ${{ secrets.DOCKER_PASSWORD }}
           $json.Password = $DOCKER_USERNAME
           $json.Username = $DOCKER_PASSWORD
-          $jsonContent | ConvertTo-Json | Set-Content -Path NSI.json -Force
+          $json | ConvertTo-Json | Set-Content -Path NSI.json -Force
         shell: powershell
 
