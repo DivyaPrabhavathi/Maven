@@ -16,7 +16,7 @@ jobs:
       - name: assign the value to the json file
         run: |
          # Read JSON file
-          $jsonContent = Get-Content NSI.json -Raw -Path  | ConvertFrom-Json
+          $jsonContent = Get-Content NSI.json -Raw | ConvertFrom-Json
           $Password = ${{ secrets.DOCKER_USERNAME }}
           $Username = ${{ secrets.DOCKER_PASSWORD }}
           $jsonContent.DOCKER_USERNAME = $Password
