@@ -1,8 +1,7 @@
-name: Update JSON with Secrets
+name: Update JSON File
  
 on:
-  workflow_dispatch: # or the branch you want this workflow to run on
- 
+  workflow_dispatch:
 jobs:
   update-json:
     runs-on: ubuntu-latest
@@ -11,26 +10,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
  
-      - name: Set secret values in JSON
+      - name: Read secrets and variables
+        id: read-secrets
         run: |
-          # Read the current content of the JSON file
-          json_content=$(cat job_dependencies/nsivalue.json)
-          
-          # Update the JSON file with the secret values
-          updated_json=$(echo "$json_content" | jq \
-            --arg PASSWORD "${{ secrets.DOCKER_USERNAME }}" \
-            --arg USERNAME "${{ secrets.DOCKER_PASSWORD }}" \
-            
-            '.key1 = $PASSWORD | .key3 = $USERNAME')
+          echo "::set-output name=secret1::${{ secrets.SECRET1 }}"
+          echo "::set-output name=variable1::${{ secrets.VARIABLE1 }}"
  
-          # Write the updated content back to the JSON file
+      - name: Update JSON file
+        run: |
+          # Load existing JSON content
+          json_content=$(cat job_dependencies/nsivalue.json)
+ 
+ 
+          # Use jq to update JSON with secrets and variables
+          updated_json=$(echo "$json_content" | jq --arg secret1 "${{ steps.read-secrets.outputs.secret1 }}" --arg variable1 "${{ steps.read-secrets.outputs.variable1 }}" '.variables.secret1 = $secret1 | .variables.variable1 = $variable1')
+ 
+          # Save updated JSON content back to the file
           echo "$updated_json" > job_dependencies/nsivalue.json
  
       - name: Commit and push changes
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add path/to/your-file.json
-          git commit -m "Update JSON with secret values"
-          git pushname: JSON secret
- 
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add job_dependencies/nsivalue.json
+
+          git commit -m 'Update JSON file with secrets and variables'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
