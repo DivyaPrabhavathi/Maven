@@ -23,6 +23,7 @@ jobs:
  
       - name: Download nsi.json from external source
         run: |
+          #wget -o https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json  NSI.json
           echo "Downloading nsi.json from external source"
           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
         shell: powershell
