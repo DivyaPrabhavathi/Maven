@@ -1,0 +1,13 @@
+name: JSON file
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  download_json:
+    runs-on: self-hosted  # Specify self-hosted runner
+
+    steps:
+      - name: Download JSON file
+        run: curl -L https://raw.githubusercontent.com/your-username/your-repo/master/your-file.json -o path/to/download/file.json
+
