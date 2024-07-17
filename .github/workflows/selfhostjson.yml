@@ -11,3 +11,13 @@ jobs:
       - name: Download JSON file
         run: wget -O  C:\Sphere\result.json https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json 
 
+      - name: assign the value to the json file
+        run: |
+         # Read JSON file
+          $jsonContent = Get-Content -Raw -Path ./C:/Sphere/result.json | ConvertFrom-Json
+          $secretOne = ${{ secrets.DOCKER_USERNAME }}
+          $secretTwo = ${{ secrets.DOCKER_PASSWORD }}
+          $jsonContent.secret1 = $secretOne
+          $jsonContent.secret2 = $secretTwo
+          $jsonContent | ConvertTo-Json | Set-Content -Path ./C:/Sphere/result.json -Force
+
