@@ -17,8 +17,8 @@ jobs:
         run: |
          # Read JSON file
           $jsonContent = Get-Content -Raw -Path  | ConvertFrom-Json
-          $secret1 = ${{ secrets.DOCKER_USERNAME }}
-          $secret2 = ${{ secrets.DOCKER_PASSWORD }}
+          $Password = ${{ secrets.DOCKER_USERNAME }}
+          $Username = ${{ secrets.DOCKER_PASSWORD }}
           $jsonContent.secret1 = $secretOne
           $jsonContent.secret2 = $secretTwo
           $jsonContent | ConvertTo-Json | Set-Content  -Force
