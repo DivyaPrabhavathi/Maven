@@ -5,7 +5,8 @@ on:
 
 jobs:
   download_json:
-    runs-on: self-hosted  # Specify self-hosted runner
+    runs-on: self-hosted 
+    environment: dev
 
     steps:
       - name: Download JSON file
