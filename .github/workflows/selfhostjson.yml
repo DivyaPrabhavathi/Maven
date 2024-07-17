@@ -9,7 +9,9 @@ jobs:
 
     steps:
       - name: Download JSON file
-        run: wget -O   https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/job_dependencies/jsonvalue.json 
+        run: |
+         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
+         shell: powershell
 
       - name: assign the value to the json file
         run: |
