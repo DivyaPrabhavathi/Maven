@@ -1,0 +1,16 @@
+name: Update JSON file with secrets and variables
+ 
+on: [push]
+ 
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update JSON file
+        run: |
+          githubContext = github.actions.getGitHubContext()
+          jsonFile = './job_dependencies/nsivalue.json'
+          jsonData = json.read(jsonFile)
+          jsonData['PASSWORD'] = githubContext.secrets.DOCKER_USERNAME
+          jsonData['USERNAME'] = githubContext.secrets.DOCKER_PASSWORD
+          json.write(jsonData, jsonFile)
