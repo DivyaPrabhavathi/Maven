@@ -1,7 +1,10 @@
-name: JSON secret
+name: Update JSON with Secrets
  
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # or the branch you want this workflow to run on
+ 
 jobs:
   update-json:
     runs-on: ubuntu-latest
@@ -10,16 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
  
-      - name: Set secret value in JSON
+      - name: Set secret values in JSON
         run: |
-          # Set the secret value as an environment variable
-          echo "::set-env name=SECRET_VALUE::${{ secrets.DOCKER_USERNAME }}"
-          
           # Read the current content of the JSON file
-          json_content=$(cat path/to/your-file.json)
+          json_content=$(cat job_dependencies/job_dependencies.json)
           
-          # Update the JSON file with the secret value
-          updated_json=$(echo "$json_content" | jq '.yourKey = env.DOCKER_USERNAME')
+          # Update the JSON file with the secret values
+          updated_json=$(echo "$json_content" | jq \
+            --arg secret1 "${{ secrets.DOCKER_USERNAME }}" \
+            --arg secret2 "${{ secrets.DOCKER_PASSWORD }}" \
+            
+            '.key1 = $secret1 | .key3 = $secret2')
  
           # Write the updated content back to the JSON file
           echo "$updated_json" > job_dependencies/job_dependencies.json
@@ -28,6 +32,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add job_dependencies/job_dependencies.json
-          git commit -m "Update JSON with secret value"
-          git push
+          git add path/to/your-file.json
+          git commit -m "Update JSON with secret values"
+          git pushname: JSON secret
+ 
