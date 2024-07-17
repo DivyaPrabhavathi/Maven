@@ -14,8 +14,8 @@ jobs:
       - name: Read JSON file
         id: read_json
         run: |
-          secret1=$(jq -r '${{ secrets.DOCKER_USERNAME }}' jsonvalue.json)
-          secret2=$(jq -r '${{ secrets.DOCKER_PASSWORD }}' jsonvalue.json)
+          secret1=$(jq -r '.DOCKER_USERNAME' jsonvalue.json)  
+          secret2=$(jq -r '.DOCKER_PASSWORD' jsonvalue.json)
  
           echo "::set-output name=secret1::$secret1"
           echo "::set-output name=secret2::$secret2"
