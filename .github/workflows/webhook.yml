@@ -1,9 +1,7 @@
 name: Update JSON with Secrets
  
 on:
-  push:
-    branches:
-      - main  # or the branch you want this workflow to run on
+  workflow_dispatch: # or the branch you want this workflow to run on
  
 jobs:
   update-json:
