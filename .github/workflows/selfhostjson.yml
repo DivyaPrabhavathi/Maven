@@ -20,6 +20,6 @@ jobs:
           $Password = ${{ secrets.DOCKER_USERNAME }}
           $Username = ${{ secrets.DOCKER_PASSWORD }}
           $jsonContent.DOCKER_USERNAME = $Password
-          $jsonContent.DOCKER_PASSWORD  = $Username
+          $jsonContent.DOCKER_PASSWORD = $Username
           $jsonContent | ConvertTo-Json | Set-Content -Path NSI.json -Force
 
