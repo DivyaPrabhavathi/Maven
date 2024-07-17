@@ -14,7 +14,7 @@ jobs:
       - name: assign the value to the json file
         run: |
          # Read JSON file
-          $jsonContent = Get-Content -Raw -Path .job_dependencies/jsonvalue.json | ConvertFrom-Json
+          $jsonContent = Get-Content -Raw -Path  | ConvertFrom-Json
           $secretOne = ${{ secrets.DOCKER_USERNAME }}
           $secretTwo = ${{ secrets.DOCKER_PASSWORD }}
           $jsonContent.secret1 = $secretOne
