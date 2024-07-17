@@ -1,0 +1,32 @@
+name: Update JSON with Secrets
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+ 
+    - name: Update JSON file with secrets
+      env:
+        MY_SECRET: ${{ secrets.DOCKER_USERNAME }}
+      run: |
+        # Path to your JSON file
+        JSON_FILE="job_dependencies/jsonvalue.json"
+        
+        # Use sed to update the JSON file with the secret value
+        sed -i 's/"secret1": "[^"]*"/"secret1": "'"$MY_SECRET"'"/' $JSON_FILE
+ 
+    - name: Commit and push changes
+      run: |
+         git config --global user.name 'github-actions[bot]'
+         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+         git add path/to/your/file.json
+         git commit -m "Update JSON file with secret values"
+         git push
