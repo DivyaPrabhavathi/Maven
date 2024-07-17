@@ -21,7 +21,7 @@ jobs:
          # Read JSON file
           $json = Get-Content NSI.json -Raw | ConvertFrom-Json
           $json.USERNAME = "$env:DOCKER_USERNAME"
-          $json.PASSWORD = "env:$DOCKER_PASSWORD"
+          $json.PASSWORD = "$env:DOCKER_PASSWORD"
           $json | ConvertTo-Json | Set-Content -Path NSI.json 
         shell: powershell
 
