@@ -17,9 +17,10 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          ENV_NAME: ${{ env.ENV_NAME }} >> $GITHUB_ENV
+          ENV_NAME: ${{ env.ENV_NAME }} 
         run: |
          # Read JSON file
+          echo "ENV_NAME = $ENV_NAME" >> $GITHUB_ENV
           $json = Get-Content NSI.json -Raw | ConvertFrom-Json
           $json.USERNAME = "$env:DOCKER_USERNAME"
           $json.PASSWORD = "$env:DOCKER_PASSWORD"
