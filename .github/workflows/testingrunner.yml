@@ -1,22 +1,28 @@
-name: testingrunner Workflow
-on: workflow_dispatch
+name: Extract Secrets from JSON
+ 
+on: 
+ workflow_dispatch:
+ 
 jobs:
-  runner_test:
+  extract-secrets:
     runs-on: ubuntu-latest
+ 
     steps:
-      #- uses: action/checkout@v3
-      - name: Checking the runner
-        run: echo "The runner is working correctly"
-
-  job2:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Teams notification
-        uses: neonidian/teams-notify-build-status@v3
-        with:
-          webhookUrl: ${{ secrets.TEAMS }}
-          title: Deploy Controller workflow
-          message: >-
-              Deploy ${{ github.ref_name }}
+      - name: Checkout repository
+        uses: actions/checkout@v2
+ 
+      - name: Read JSON file
+        id: read_json
+        run: |
+          secret1=$(jq -r '.secret1' secrets.json)
+          secret2=$(jq -r '.secret2' secrets.json)
+ 
+          echo "::set-output name=secret1::$secret1"
+          echo "::set-output name=secret2::$secret2"
+ 
+      - name: Use extracted secrets
+        run: |
+          echo "Secret1: ${{ steps.read_json.outputs.secret1 }}"
+          echo "Secret2: ${{ steps.read_json.outputs.secret2 }}"
           
         
