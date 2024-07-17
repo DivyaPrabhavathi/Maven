@@ -1,8 +1,8 @@
 {
    "Sphere": {
-   "USERNAME": "<DOCKER_USERNAME>",
-   "PASSWORD": "<DOCKER_PASSWORD>",
-   "NAME": " "
+   "USERNAME": "",
+   "PASSWORD": "",
+   "NAME": ""
    }
 }
    
