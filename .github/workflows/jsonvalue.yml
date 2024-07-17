@@ -1,17 +1,12 @@
 name: Update JSON file with secrets and variables
- 
-on: 
- workflow_dispatch:
- 
+
+on:
+  workflow_dispatch:
+
 jobs:
   update-json:
     runs-on: ubuntu-latest
     steps:
-      - name: Update JSON file
-        run: |
-          githubContext = github.actions.getGitHubContext()
-          jsonFile = './job_dependencies/nsivalue.json'
-          jsonData = json.read(jsonFile)
-          jsonData['PASSWORD'] = githubContext.secrets.DOCKER_USERNAME
-          jsonData['USERNAME'] = githubContext.secrets.DOCKER_PASSWORD
-          json.write(jsonData, jsonFile)
+    - name: Update JSON file with secrets
+      run: |
+        jq '.PASSWORD = "${{ secrets.DOCKER_USERNAME }}" | .USERNAME = "${{ secrets.DOCKER_PASSWORD }}"' ./job_dependencies/nsivalue.json > /tmp/updated_nsivalue.json && mv /tmp/updated_nsivalue.json ./job_dependencies/nsivalue.json
