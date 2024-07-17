@@ -15,9 +15,9 @@ jobs:
         run: |
          # Read JSON file
           $jsonContent = Get-Content -Raw -Path  | ConvertFrom-Json
-          $secretOne = ${{ secrets.DOCKER_USERNAME }}
-          $secretTwo = ${{ secrets.DOCKER_PASSWORD }}
+          $secret1 = ${{ secrets.DOCKER_USERNAME }}
+          $secret2 = ${{ secrets.DOCKER_PASSWORD }}
           $jsonContent.secret1 = $secretOne
           $jsonContent.secret2 = $secretTwo
-          $jsonContent | ConvertTo-Json | Set-Content -Path ./C:/Sphere/result.json -Force
+          $jsonContent | ConvertTo-Json | Set-Content  -Force
 
