@@ -74,6 +74,6 @@ jobs:
 
             # Output the path to the decrypted file
             Write-Output "Decrypted JSON file path: decrypted_NSI.json"
-         shell: powershell
+        shell: powershell
 
   
