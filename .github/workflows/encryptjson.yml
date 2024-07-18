@@ -1,7 +1,7 @@
 name: encryptJSON file
 on: workflow_dispatch
 jobs:
-  download_json:
+  encrypt_json:
     runs-on: self-hosted
     environment:
       dev
@@ -10,20 +10,24 @@ jobs:
         run: |
           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
         shell: powershell
+
       - name: Assign values to JSON file
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           ENV_NAME: ${{ secrets.ENV_NAME }}
         run: |
-          # Read JSON file
-          $json = Get-Content NSI.json -Raw | ConvertFrom-Json
-          $json.Sphere.USERNAME = "$env:DOCKER_USERNAME"
-          $json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
-          $json.Sphere.NAME = "$env:ENV_NAME"
-          $json | ConvertTo-Json | Set-Content -Path NSI.json
-          
-        shell: powershell
+          # Read JSON file and convert to object
+          $json = Get-Content NSI.json | ConvertFrom-Json
+
+          # Modify JSON object properties using environment variables
+          $json.Sphere.USERNAME = $env:DOCKER_USERNAME
+          $json.Sphere.PASSWORD = $env:DOCKER_PASSWORD
+          $json.Sphere.NAME = $env:ENV_NAME
+
+          # Convert modified object back to JSON string
+          $plainTextJson = $json -AsJson
+
       - name: Encrypt JSON file and generate key
         run: |
           # Generate a new AES key (32 bytes)
@@ -46,5 +50,3 @@ jobs:
           # Save the key to a file (consider encryption for the key)
           $key | Set-Content -Path "key.txt"
         shell: powershell
-
-          
