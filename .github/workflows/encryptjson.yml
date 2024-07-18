@@ -51,8 +51,8 @@ jobs:
            Write-Output "Encryption key path: encryption_key.txt"
          shell: powershell
 
-         - name: Decrypt JSON file
-           run: |
+      - name: Decrypt JSON file
+        run: |
             # Load the necessary assembly for decryption
             Add-Type -AssemblyName System.Security
 
