@@ -34,7 +34,8 @@ jobs:
           $key = [System.Convert]::ToBase64String((New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes(32))
           $key | Out-File -FilePath "encryption_key.txt"
           Write-Output "Encryption key: $key"
-        shell: pwsh
+        shell: powershell
+
  
       - name: Encrypt JSON File
         run: |
@@ -52,4 +53,5 @@ jobs:
           $iv | Out-File -FilePath "iv.txt"
           $encryptedContent | Out-File -FilePath "your_encrypted.json"
           Write-Output "Encrypted JSON file generated: your_encrypted.json"
-        shell: pwsh
+        shell: powershell
+
