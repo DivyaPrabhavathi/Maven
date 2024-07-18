@@ -26,8 +26,7 @@ jobs:
           $json.Sphere.NAME = $env:ENV_NAME
 
           # Convert modified object back to JSON string
-          $plainTextJson = $json | ConvertTo-Json
-
+          $json | ConvertTo-Json | Set-Content -Path NSI.json
       - name: Encrypt JSON file
         run: |
          # Ensure the required module is installed
