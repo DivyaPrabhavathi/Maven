@@ -28,46 +28,29 @@ jobs:
           # Convert modified object back to JSON string
           $plainTextJson = $json | ConvertTo-Json
 
-      - name: Generate encryption key
+      - name: Encrypt JSON file
         run: |
-          $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
-          $randomBytes = $rng.GetBytes(32)
-          if ($randomBytes) {
-          $key = [System.Convert]::ToBase64String($randomBytes)
-          $secureKey = ConvertTo-SecureString -String $key -AsPlainText -Force
-           $secureKey | Out-File -FilePath "encryption_key.txt"
-          } else {
-           Write-Error "Failed to generate random bytes for encryption key."
-           Exit 1
-            }
+         # Ensure the required module is installed
+         Install-Module -Name PowerShellGet -Force -AllowClobber
+         Import-Module -Name PowerShellGet
 
-          $key | Out-File -FilePath "encryption_key.txt"
-          Write-Output "Encryption key: $key"
-        shell: powershell
- 
-      - name: Encrypt JSON File
-        run: |
-          $key = Get-Content -Path "encryption_key.txt"
-          $jsonContent = Get-Content -Path "NSI.json" -Raw
-          $keyBytes = [System.Convert]::FromBase64String($key)
-          $aes = New-Object System.Security.Cryptography.AesManaged
-          $aes.Key = $keyBytes
-          $aes.GenerateIV()
-          $iv = [System.Convert]::ToBase64String($aes.IV)
-          $encryptor = $aes.CreateEncryptor()
-          $jsonBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonContent)
-          $encryptedBytes = $encryptor.TransformFinalBlock($jsonBytes, 0, $jsonBytes.Length)
-          $encryptedContent = [System.Convert]::ToBase64String($encryptedBytes)
-          $iv | Out-File -FilePath "iv.txt"
-          $encryptedContent | Out-File -FilePath "encrypted.json"
-          Write-Output "Encrypted JSON file generated: your_encrypted.json"
-        shell: powershell
- 
-      - name: Upload encrypted JSON file and keys
-        uses: actions/upload-artifact@v2
-        with:
-          name: encrypted-files
-          path: |
-            encrypted.json
-            encryption_key.txt
-            iv.txt
+         # Generate a new encryption key
+         $key = New-Object Byte[] 32
+         [Security.Cryptography.RNGCryptoServiceProvider]::Create().GetBytes($key)
+         $keyString = [Convert]::ToBase64String($key)
+         Set-Content -Path "encryption_key.txt" -Value $keyString
+
+         # Encrypt the JSON file
+         $jsonContent = Get-Content "NSI.json" -Raw
+         $encryptedJson = ConvertTo-SecureString -String $jsonContent -AsPlainText -Force
+         $encryptedJsonBytes = [Security.Cryptography.ProtectedData]::Protect(
+          [Text.Encoding]::UTF8.GetBytes($encryptedJson),
+          $key,
+          [Security.Cryptography.DataProtectionScope]::CurrentUser
+          )
+          [IO.File]::WriteAllBytes("encrypted_NSI.json", $encryptedJsonBytes)
+
+          # Output the paths to the encrypted file and the key
+           Write-Output "Encrypted JSON file path: encrypted_NSI.json"
+           Write-Output "Encryption key path: encryption_key.txt"
+  
