@@ -30,7 +30,8 @@ jobs:
           (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes)
           $key = [System.Convert]::ToBase64String($bytes)
           # Encrypt the JSON file
-          $encryptedJson = Encrypt-String -String (Get-Content NSI.json -Raw) -Key $key
+          $secureJson = ConvertTo-SecureString -String (Get-Content NSI.json -Raw) -Key $bytes
+          $encryptedJson = ConvertFrom-SecureString -SecureString $secureJson -Key $bytes
           # Save the encrypted JSON to a new file
           $encryptedJson | Set-Content -Path "NSI.encrypted.json"
           # Save the key to a file
