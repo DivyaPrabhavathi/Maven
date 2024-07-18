@@ -26,7 +26,7 @@ jobs:
           $json.Sphere.NAME = $env:ENV_NAME
 
           # Convert modified object back to JSON string
-          $plainTextJson = $json -AsJson
+          $plainTextJson = $json | ConvertTo-Json
 
       - name: Encrypt JSON file and generate key
         run: |
