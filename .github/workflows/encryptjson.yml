@@ -47,6 +47,4 @@ jobs:
           $key | Set-Content -Path "key.txt"
         shell: powershell
 
-          # Save the key to a file (consider encryption for the key)
-          $key | Set-Content -Path "key.txt"
-        shell: powershell
+          
