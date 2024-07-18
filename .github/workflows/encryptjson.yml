@@ -1,1 +1,55 @@
+name: JSON file
 
+on: 
+  workflow_dispatch:
+
+jobs:
+  download_json:
+    runs-on: self-hosted 
+    environment: dev
+
+    steps:
+      - name: Download JSON file
+        run: |
+         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
+        shell: powershell
+
+      
+
+      - name: assign the value to the json file
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          ENV_NAME: ${{ secrets.ENV_NAME }} 
+        run: |
+         # Read JSON file
+          $json = Get-Content NSI.json -Raw | ConvertFrom-Json
+          $json.Sphere.USERNAME = "$env:DOCKER_USERNAME"
+          $json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
+          $json.Sphere.NAME = "$env:ENV_NAME"
+          $json | ConvertTo-Json | Set-Content -Path NSI.json 
+        shell: powershell
+      - name: Generate encryption key
+        run: |
+          $key = [System.Convert]::ToBase64String((New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes(32))
+          $key | Out-File -FilePath "encryption_key.txt"
+          Write-Output "Encryption key: $key"
+        shell: pwsh
+ 
+      - name: Encrypt JSON File
+        run: |
+          $key = Get-Content -Path "encryption_key.txt"
+          $jsonContent = Get-Content -Path "NSI.json" -Raw
+          $keyBytes = [System.Convert]::FromBase64String($key)
+          $aes = New-Object System.Security.Cryptography.AesManaged
+          $aes.Key = $keyBytes
+          $aes.GenerateIV()
+          $iv = [System.Convert]::ToBase64String($aes.IV)
+          $encryptor = $aes.CreateEncryptor()
+          $jsonBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonContent)
+          $encryptedBytes = $encryptor.TransformFinalBlock($jsonBytes, 0, $jsonBytes.Length)
+          $encryptedContent = [System.Convert]::ToBase64String($encryptedBytes)
+          $iv | Out-File -FilePath "iv.txt"
+          $encryptedContent | Out-File -FilePath "your_encrypted.json"
+          Write-Output "Encrypted JSON file generated: your_encrypted.json"
+        shell: pwsh
