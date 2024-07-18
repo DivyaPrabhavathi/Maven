@@ -1,4 +1,4 @@
-name: JSON file
+name: encryptJSON file
 
 on: 
   workflow_dispatch:
