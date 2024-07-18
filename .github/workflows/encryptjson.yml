@@ -30,14 +30,12 @@ jobs:
       - name: Encrypt JSON file
         run: |
          Add-Type -AssemblyName System.Security
-
-
          # Generate a new encryption key
          $key = New-Object Byte[] 32
          [Security.Cryptography.RNGCryptoServiceProvider]::Create().GetBytes($key)
          $keyString = [Convert]::ToBase64String($key)
          Set-Content -Path "encryption_key.txt" -Value $keyString
-
+         
          # Encrypt the JSON file
          $jsonContent = Get-Content "NSI.json" -Raw
          $encryptedJson = ConvertTo-SecureString -String $jsonContent -AsPlainText -Force
@@ -47,8 +45,35 @@ jobs:
           [Security.Cryptography.DataProtectionScope]::CurrentUser
           )
           [IO.File]::WriteAllBytes("encrypted_NSI.json", $encryptedJsonBytes)
-
+          
           # Output the paths to the encrypted file and the key
            Write-Output "Encrypted JSON file path: encrypted_NSI.json"
            Write-Output "Encryption key path: encryption_key.txt"
+         shell: powershell
+
+         - name: Decrypt JSON file
+           run: |
+            # Load the necessary assembly for decryption
+            Add-Type -AssemblyName System.Security
+
+             # Load the encryption key from the local file
+             $keyString = Get-Content -Path "encryption_key.txt"
+             $key = [Convert]::FromBase64String($keyString)
+
+             # Load the encrypted JSON file
+             $encryptedJsonBytes = [IO.File]::ReadAllBytes("encrypted_NSI.json")
+
+             # Decrypt the JSON file
+             $decryptedJsonBytes = [Security.Cryptography.ProtectedData]::Unprotect(
+             $encryptedJsonBytes,
+             $key,
+              [Security.Cryptography.DataProtectionScope]::CurrentUser
+               )
+            $decryptedJson = [Text.Encoding]::UTF8.GetString($decryptedJsonBytes)
+            Set-Content -Path "decrypted_NSI.json" -Value $decryptedJson
+
+            # Output the path to the decrypted file
+            Write-Output "Decrypted JSON file path: decrypted_NSI.json"
+         shell: powershell
+
   
