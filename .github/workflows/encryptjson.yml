@@ -30,7 +30,17 @@ jobs:
 
       - name: Generate encryption key
         run: |
-          $key = [System.Convert]::ToBase64String((New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes(32))
+          $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
+          $randomBytes = $rng.GetBytes(32)
+          if ($randomBytes) {
+          $key = [System.Convert]::ToBase64String($randomBytes)
+          $secureKey = ConvertTo-SecureString -String $key -AsPlainText -Force
+           $secureKey | Out-File -FilePath "encryption_key.txt"
+          } else {
+           Write-Error "Failed to generate random bytes for encryption key."
+           Exit 1
+            }
+
           $key | Out-File -FilePath "encryption_key.txt"
           Write-Output "Encryption key: $key"
         shell: powershell
