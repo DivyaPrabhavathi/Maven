@@ -28,25 +28,36 @@ jobs:
           # Convert modified object back to JSON string
           $plainTextJson = $json | ConvertTo-Json
 
-      - name: Encrypt JSON file and generate key
+      - name: Generate encryption key
         run: |
-          # Generate a new AES key (32 bytes)
-          $bytes = New-Object byte[](32)
-          (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes)
-          $key = [System.Convert]::ToBase64String($bytes)
-
-          # Ensure plainTextJson is a string
-          if (-not [string]::IsInstanceOfType($plainTextJson)) {
-            $plainTextJson = $plainTextJson.ToString()  # Convert to string if needed
-          }
-
-          # Encrypt the JSON string
-          $secureJson = ConvertTo-SecureString -String $plainTextJson -Key $bytes
-          $encryptedJson = ConvertFrom-SecureString -SecureString $secureJson -Key $bytes
-
-          # Save the encrypted JSON to a new file
-          $encryptedJson | Set-Content -Path "NSI.encrypted.json"
-
-          # Save the key to a file (consider encryption for the key)
-          $key | Set-Content -Path "key.txt"
-        shell: powershell
+          $key = [System.Convert]::ToBase64String((New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes(32))
+          $key | Out-File -FilePath "encryption_key.txt"
+          Write-Output "Encryption key: $key"
+        shell: pwsh
+ 
+      - name: Encrypt JSON File
+        run: |
+          $key = Get-Content -Path "encryption_key.txt"
+          $jsonContent = Get-Content -Path "NSI.json" -Raw
+          $keyBytes = [System.Convert]::FromBase64String($key)
+          $aes = New-Object System.Security.Cryptography.AesManaged
+          $aes.Key = $keyBytes
+          $aes.GenerateIV()
+          $iv = [System.Convert]::ToBase64String($aes.IV)
+          $encryptor = $aes.CreateEncryptor()
+          $jsonBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonContent)
+          $encryptedBytes = $encryptor.TransformFinalBlock($jsonBytes, 0, $jsonBytes.Length)
+          $encryptedContent = [System.Convert]::ToBase64String($encryptedBytes)
+          $iv | Out-File -FilePath "iv.txt"
+          $encryptedContent | Out-File -FilePath "encrypted.json"
+          Write-Output "Encrypted JSON file generated: your_encrypted.json"
+        shell: pwsh
+ 
+      - name: Upload encrypted JSON file and keys
+        uses: actions/upload-artifact@v2
+        with:
+          name: encrypted-files
+          path: |
+            encrypted.json
+            encryption_key.txt
+            iv.txt
