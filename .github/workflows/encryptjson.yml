@@ -31,8 +31,8 @@ jobs:
       - name: Encrypt JSON file
         run: |
          # Ensure the required module is installed
-         Install-Module -Name PowerShellGet -Force -AllowClobber
-         Import-Module -Name PowerShellGet
+         #Install-Module -Name PowerShellGet -Force -AllowClobber
+         #Import-Module -Name PowerShellGet
 
          # Generate a new encryption key
          $key = New-Object Byte[] 32
