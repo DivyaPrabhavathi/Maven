@@ -23,14 +23,25 @@ jobs:
           $json.Sphere.NAME = "$env:ENV_NAME"
           $json | ConvertTo-Json | Set-Content -Path NSI.json
         shell: powershell
-      - name: Encrypt JSON file and generate key
+      - name: Encrypt JSON file and store the key
         run: |
-          # Generate a new AES key
-          $key = New-AesKey -Size 256
-          # Encrypt the JSON file
-          $encryptedJson = Encrypt-String -String (Get-Content NSI.json -Raw) -Key $key
-          # Save the encrypted JSON to a new file
-          $encryptedJson | Set-Content -Path "NSI.encrypted.json"
-          # Save the key to a file
-          $key | ConvertTo-SecureString -OutFile "key.sec"
-        shell: powershell
+         # Generate encryption key
+         $key = New-Object Byte[] 32
+         [Security.Cryptography.RNGCryptoServiceProvider]::Create().GetBytes($key)
+         $keyPath = "$env:GITHUB_WORKSPACE/encryption_key.key"
+         [System.IO.File]::WriteAllBytes($keyPath, $key)
+         # Encrypt the JSON file
+         $jsonPath = "$env:GITHUB_WORKSPACE/NSI.json"
+         $encryptedPath = "$env:GITHUB_WORKSPACE/NSI_encrypted.json"
+         $aes = [System.Security.Cryptography.Aes]::Create()
+         $aes.Key = $key$aes.GenerateIV()$
+         iv = $aes.IV
+         $encryptor = $aes.CreateEncryptor()
+         $fsInput = [System.IO.File]::OpenRead($jsonPath)
+         $fsEncrypted = [System.IO.File]::OpenWrite($encryptedPath)
+         $fsEncrypted.Write($iv, 0, $iv.Length)
+         $cs = New-Object System.Security.Cryptography.CryptoStream($fsEncrypted, $encryptor, [System.Security.Cryptography.CryptoStreamMode]::Write)
+         $buffer = New-Object Byte[] 1024
+         while (($read = $fsInput.Read($buffer, 0, $buffer.Length)) -gt 0) {
+          $cs.Write($buffer, 0, $read)
+          }
