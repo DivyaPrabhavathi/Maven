@@ -25,15 +25,21 @@ jobs:
         shell: powershell
       - name: Encrypt JSON file and generate key
         run: |
-          # Generate a new AES key
+          # Generate a new AES key (32 bytes)
           $bytes = New-Object byte[](32)
           (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes)
           $key = [System.Convert]::ToBase64String($bytes)
-          # Encrypt the JSON file
-          $secureJson = ConvertTo-SecureString -String (Get-Content NSI.json -Raw) -Key $bytes
+
+          # Convert JSON to plain text string
+          $plainTextJson = Get-Content NSI.json
+
+          # Encrypt the JSON string
+          $secureJson = ConvertTo-SecureString -String $plainTextJson -Key $bytes
           $encryptedJson = ConvertFrom-SecureString -SecureString $secureJson -Key $bytes
+
           # Save the encrypted JSON to a new file
           $encryptedJson | Set-Content -Path "NSI.encrypted.json"
-          # Save the key to a file
+
+          # Save the key to a file (consider encryption for the key)
           $key | Set-Content -Path "key.txt"
         shell: powershell
