@@ -22,7 +22,7 @@ jobs:
           $json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
           $json.Sphere.NAME = "$env:ENV_NAME"
           $json | ConvertTo-Json | Set-Content -Path NSI.json
-          $plainTextJson = $json -AsJson
+          
         shell: powershell
       - name: Encrypt JSON file and generate key
         run: |
