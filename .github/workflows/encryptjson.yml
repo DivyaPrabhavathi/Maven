@@ -49,7 +49,7 @@ jobs:
           # Output the paths to the encrypted file and the key
            Write-Output "Encrypted JSON file path: encrypted_NSI.json"
            Write-Output "Encryption key path: encryption_key.txt"
-         shell: powershell
+        shell: powershell
 
       - name: Decrypt JSON file
         run: |
