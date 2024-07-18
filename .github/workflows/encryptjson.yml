@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Download JSON file
         run: |
-          Invoke-WebRequest -Uri "(link unavailable)" -OutFile "NSI.json"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DivyaPrabhavathi/Maven/main/NSI.json" -OutFile "NSI.json"
         shell: powershell
       - name: Assign values to JSON file
         env:
