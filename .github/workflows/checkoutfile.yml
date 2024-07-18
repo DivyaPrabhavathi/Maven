@@ -1,4 +1,4 @@
-name: JSON file
+name: checkoutJSON file
 
 on: 
   workflow_dispatch:
