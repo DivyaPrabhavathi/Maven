@@ -1,0 +1,31 @@
+name: JSON file
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  download_json:
+    runs-on: self-hosted 
+    environment: dev
+
+    steps:
+      - name: Checkout files
+        uses: Bhacaz/checkout-files@v2
+        with:
+         files: NSI.json
+
+      
+
+      - name: assign the value to the json file
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          ENV_NAME: ${{ secrets.ENV_NAME }} 
+        run: |
+         # Read JSON file
+          $json = Get-Content NSI.json -Raw | ConvertFrom-Json
+          $json.Sphere.USERNAME = "$env:DOCKER_USERNAME"
+          $json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
+          $json.Sphere.NAME = "$env:ENV_NAME"
+          $json | ConvertTo-Json | Set-Content -Path NSI.json 
+        shell: powershell
