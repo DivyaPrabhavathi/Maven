@@ -22,6 +22,7 @@ jobs:
           $json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
           $json.Sphere.NAME = "$env:ENV_NAME"
           $json | ConvertTo-Json | Set-Content -Path NSI.json
+          $plainTextJson = $json -AsJson
         shell: powershell
       - name: Encrypt JSON file and generate key
         run: |
@@ -30,8 +31,10 @@ jobs:
           (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes)
           $key = [System.Convert]::ToBase64String($bytes)
 
-          # Convert JSON to plain text string
-          $plainTextJson = Get-Content NSI.json
+          # Ensure plainTextJson is a string
+          if (-not [string]::IsInstanceOfType($plainTextJson)) {
+            $plainTextJson = $plainTextJson.ToString()  # Convert to string if needed
+          }
 
           # Encrypt the JSON string
           $secureJson = ConvertTo-SecureString -String $plainTextJson -Key $bytes
@@ -39,6 +42,10 @@ jobs:
 
           # Save the encrypted JSON to a new file
           $encryptedJson | Set-Content -Path "NSI.encrypted.json"
+
+          # Save the key to a file (consider encryption for the key)
+          $key | Set-Content -Path "key.txt"
+        shell: powershell
 
           # Save the key to a file (consider encryption for the key)
           $key | Set-Content -Path "key.txt"
