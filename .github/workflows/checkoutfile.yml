@@ -12,7 +12,7 @@ jobs:
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
-         files: NSI.json
+         files: ./nsi/NSI.json
 
       
 
