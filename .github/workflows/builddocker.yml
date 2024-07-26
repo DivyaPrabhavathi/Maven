@@ -1,4 +1,4 @@
-name: Deploy to Windows Server
+name: Deploy to Windows 
 
 on:
  workflow_dispatch:  # Replace with your desired branch
