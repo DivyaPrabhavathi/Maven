@@ -7,9 +7,6 @@ on:
 jobs:
   update_json:
     runs-on: ubuntu-latest
-    outputs:
-      branch_names: ${{ steps.extract-branch.outputs.branch_name }}
-      code_name: ${{ steps.extract-branch.outputs.code_name }}
  
     steps:
       - name: Checkout repository
@@ -20,7 +17,7 @@ jobs:
         shell: bash
         run: |
          
-          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json) >> $GITHUB_ENV
           echo "Branch name: $branch_name"
           code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
@@ -28,9 +25,13 @@ jobs:
             echo "No object with Phase=2 found in component.json"
             exit 1
           else
-            echo "::set-output name=branch_name::$branch_name"
+           
             echo "::set-output name=repo_name::$code_name"
           fi
+
+      - name: print the output value
+        run: |
+         echo "ouputs: ${{ env.branch_name }}"
 
       
  
