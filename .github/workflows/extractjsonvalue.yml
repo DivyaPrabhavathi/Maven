@@ -8,7 +8,7 @@ jobs:
   update_json:
     runs-on: self-hosted
     outputs:
-      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      branch_names: ${{ steps.extract-branch.outputs.branch_name }}
       code_name: ${{ steps.extract-branch.outputs.code_name }}
  
     steps:
