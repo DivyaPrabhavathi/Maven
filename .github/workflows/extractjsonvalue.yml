@@ -21,6 +21,7 @@ jobs:
         run: |
          
           branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          echo "Branch name: $branch_name"
           code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
           if [[ -z "$branch_name" || -z $code_name ]]; then
@@ -31,7 +32,6 @@ jobs:
             echo "::set-output name=repo_name::$code_name"
           fi
 
-      - name: print the output
-        run: echo "$branch_name"
+      
  
       
