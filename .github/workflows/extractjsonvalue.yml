@@ -6,32 +6,16 @@ on:
  
 jobs:
   update_json:
-    runs-on: Self-hosted
+    runs-on: self-hosted
  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
  
-      - name: Extract branch name from JSON
-        id: extract-branch
-        shell: bash
+      - name: check the JQ version
         run: |
-         
-          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json) >> $GITHUB_ENV
-          echo "Branch name: $branch_name"
-          code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
-   
-          if [[ -z "$branch_name" || -z $code_name ]]; then
-            echo "No object with Phase=2 found in component.json"
-            exit 1
-          else
-           
-            echo "::set-output name=repo_name::$code_name"
-          fi
-
-      - name: print the output value
-        run: |
-         echo "ouputs: ${{ steps.extract-branch.branch_name }}"
+          jq --version
+    
 
       
  
