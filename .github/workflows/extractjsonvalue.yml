@@ -1,0 +1,62 @@
+name: TakingKeyfromJson
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to use'
+        required: true
+      code-repository:
+        description: 'Provide Repo name'
+        required: true
+ 
+jobs:
+  update_json:
+    runs-on: self-hosted
+    outputs:
+      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      code_name: ${{ steps.extract-branch.outputs.code_name }}
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Install jq on Windows
+        run: |
+         Invoke-WebRequest -Uri https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe -OutFile jq.exe
+          Move-Item -Path jq.exe -Destination 'C:\Users\10443\jq\jq.exe'
+          #[Environment]::SetEnvironmentVariable('PATH', $Env:PATH + ';C:\Users\10443\jq', [System.EnvironmentVariableTarget]::Machine)
+        shell: powershell
+          
+      
+      - name: check jq version
+        run: |
+          jq --version
+ 
+      - name: Extract branch name from JSON
+        id: extract-branch
+        shell: bash
+        run: |
+         
+          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
+   
+          if [[ -z "$branch_name" || -z $code_name ]]; then
+            echo "No object with Phase=2 found in component.json"
+            exit 1
+          else
+            echo "::set-output name=branch_name::$branch_name"
+            echo "::set-output name=repo_name::$code_name"
+          fi
+ 
+      - name: Checkout repo using branch name
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.code-repository }}
+          ref: ${{ needs.update_json.outputs.branch_name }}
+          token: ${{ secrets.PAT_TOKEN }}
+          path: staging
+      - name: List directory contents
+        run: |
+          cd staging
+          ls -la
