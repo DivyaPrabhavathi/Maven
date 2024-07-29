@@ -31,7 +31,7 @@ jobs:
 
       - name: print the output value
         run: |
-         echo "ouputs: ${{ env.branch_name }}"
+         echo "ouputs: ${{ steps.extract-branch.branch_name }}"
 
       
  
