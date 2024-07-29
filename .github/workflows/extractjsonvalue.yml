@@ -32,6 +32,6 @@ jobs:
           fi
 
       - name: print the output
-        run: echo "$branch name"
+        run: echo "$branch_name"
  
       
