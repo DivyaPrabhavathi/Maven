@@ -1,0 +1,62 @@
+name: JQcommandtest
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to use'
+        required: true
+      code-repository:
+        description: 'Provide Repo name'
+        required: true
+ 
+jobs:
+  update_json:
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      code_name: ${{ steps.extract-branch.outputs.code_name }}
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+    
+      - name: Extract branch name from JSON
+        id: extract-branch
+        shell: bash
+        run: |
+         
+          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
+   
+          if [[ -z "$branch_name" || -z $code_name ]]; then
+            echo "No object with Phase=2 found in component.json"
+            exit 1
+          else
+            echo "::set-output name=branch_name::$branch_name"
+            echo "::set-output name=repo_name::$code_name"
+          fi
+      - name: Print the values
+        run: |
+          #echo "Display_branch_name: $branch_name"
+          echo "Output_branchname: ${{ steps.extract-branch.outputs.branch_name }}"
+ 
+      - name: Checkout repo using branch name
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.code-repository }}
+          ref: ${{ steps.extract-branch.outputs.branch_name }}
+          token: ${{ secrets.PAT_TOKEN }}
+          path: staging
+      - name: List directory contents
+        run: |
+          cd staging
+          ls -la
+      - name: Download and update nsi.json with secrets
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          prod_API_KEY: ${{ secrets.API_KEY }}
+        run: ./Scripts/scriptupdate.ps1
+        shell: pwsh
