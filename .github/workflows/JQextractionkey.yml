@@ -49,10 +49,6 @@ jobs:
           ref: ${{ steps.extract-branch.outputs.branch_name }}
           token: ${{ secrets.PAT_TOKEN }}
           path: staging
-      - name: List directory contents
-        run: |
-          cd staging
-          ls -la
       - name: Download and update nsi.json with secrets
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
