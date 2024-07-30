@@ -53,6 +53,10 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          prod_API_KEY: ${{ secrets.API_KEY }}
-        run: ./Scripts/scriptupdate.ps1
-        shell: pwsh
+          ENV_NAME: ${{ secrets.ENV_NAME }} 
+        run: .\.github\Scripts\encrypt.ps1
+        shell: powershell
+      - name: Download and update nsi.json with secrets
+        run: .\.github\Scripts\decrypt.ps1
+        shell: powershell
+
