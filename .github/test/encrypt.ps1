@@ -7,9 +7,9 @@ param (
 # Update nsi.json with secrets
 echo "Updating nsi.json with secrets"
 $json = Get-Content -Path $fileToEncrypt -Raw | ConvertFrom-Json
-$json.Sphere.DockerUsername = "$env:DOCKER_USERNAME"
-$json.Sphere.DockerPassword = "$env:DOCKER_PASSWORD"
-$json.Sphere.APIkey = "$env:prod_API_KEY"
+$json.Sphere.USERNAME = "$env:DOCKER_USERNAME"
+$json.Sphere.PASSWORD = "$env:DOCKER_PASSWORD"
+$json.Sphere.NAME = "$env:ENV_NAME"
 $json | ConvertTo-Json | Set-Content -Path $fileToEncrypt
 
 # Generate a secure key (replace 'MySuperSecretKey!' with a valid 256-bit key in Base64 encoding)
