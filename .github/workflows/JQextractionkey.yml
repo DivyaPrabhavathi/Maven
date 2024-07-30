@@ -13,9 +13,9 @@ on:
 jobs:
   update_json:
     runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
-      code_name: ${{ steps.extract-branch.outputs.code_name }}
+    #outputs:
+      #branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      #code_name: ${{ steps.extract-branch.outputs.code_name }}
  
     steps:
       - name: Checkout repository
