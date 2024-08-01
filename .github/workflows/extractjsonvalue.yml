@@ -44,23 +44,26 @@ jobs:
           echo "Output_codename: ${{ steps.extract-branch.outputs.code_name }}"
      
 
-      - name: Concatvalue
+      - name: Concat value
+        id: concat-value
         shell: pwsh
         env:
-          CLIENTNAME: ${{ vars.CLIENTNAME }}
+         CLIENTNAME: ${{ vars.CLIENTNAME }}
         run: |
-          $JSONBRANCH = "${{ steps.extract-branch.outputs.branch_name }}"
-          $JSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
-          $concatvalue = "sb/$($JSONBRANCH)/$($JSONCODE)_encrypted.json"
-          $concatvaluenew = "$($JSONCODE)_encrypted.json"
-          $sharefile = "$env:CLIENTNAME"
-          $filesharename = "${sharefile}Share"
-          $filepath = "nsi/Jsonfile.json"
-          Write-Output "$concatvalue"
-          Write-Output "$filesharename"
-          Write-Output "$concatvaluenew"
-          
-
-      
+         $JSONBRANCH = "${{ steps.extract-branch.outputs.branch_name }}"
+         $JSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
+         $concatvalue = "sb/$($JSONBRANCH)/$($JSONCODE)_encrypted.json"
+         $concatvaluenew = "$($JSONCODE)_encrypted.json"
+         $sharefile = "$env:CLIENTNAME"
+         $filesharename = "${sharefile}Share"
+         $filepath = "nsi/Jsonfile.json"
+         Write-Output "::set-output name=concatvaluenew::$concatvaluenew"
+         Write-Output "::set-output name=filepath::$filepath"
+         Write-Output "::set-output name=concatvalue::$concatvalue"
+         Write-Output "::set-output name=filesharename::$filesharename"
  
-      
+      - name: Copy file
+        shell: bash
+        run: |
+         echo "Copying file from ${{ steps.concat-value.outputs.concatvaluenew }} to ${{ steps.concat-value.outputs.filepath }}"
+         cp ${{ steps.concat-value.outputs.concatvaluenew }} ${{ steps.concat-value.outputs.filepath }}
