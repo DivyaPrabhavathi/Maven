@@ -36,7 +36,7 @@ jobs:
  
       - name: Extract branch name from JSON
         id: extract-branch
-        shell: bash
+        shell: powershell
        
         run: |
           $env:Path += ";C:\ProgramData\chocolatey\bin"
