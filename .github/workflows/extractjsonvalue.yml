@@ -56,7 +56,7 @@ jobs:
           $JSONCODE | Out-File -FilePath $filepath
           $sharefile = "$env:CLIENTNAME"
           $filesharename = "${sharefile}Share"
-          $filepath = "Scripts/Jsonfile.json"
+          $filepath = "nsi/Jsonfile.json"
           Write-Output "$concatoutput"
           Write-Output "$filesharename"
           
