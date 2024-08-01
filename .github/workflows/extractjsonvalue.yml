@@ -2,21 +2,91 @@ name: TakingKeyfromJson
  
 on:
   workflow_dispatch:
-   
+    inputs:
+      environment:
+        description: 'Environment to use'
+        required: true
+      code-repository:
+        description: 'Provide Repo name'
+        required: true
  
 jobs:
   update_json:
     runs-on: self-hosted
+    outputs:
+      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      code_name: ${{ steps.extract-branch.outputs.code_name }}
  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
- 
-      - name: check the JQ version
+      
+      #- name: Install jq on Windows
+        #run: |
+         #Invoke-WebRequest -Uri https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe -OutFile jq.exe
+         #Move-Item -Path jq.exe -Destination 'C:\Users\10443\jq\jq.exe'
+         #[Environment]::SetEnvironmentVariable('PATH', $Env:PATH + ';C:\Users\10443\jq', [System.EnvironmentVariableTarget]::Machine)
+        #shell: powershell
+          
+      
+      - name: check jq version
         run: |
           $env:Path += ";C:\ProgramData\chocolatey\bin"
           jq --version
-    
+ 
+      - name: Extract branch name from JSON
+        id: extract-branch
+        shell: bash
+        run: |
+         
+          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
+   
+          if [[ -z "$branch_name" || -z $code_name ]]; then
+            echo "No object with Phase=2 found in component.json"
+            exit 1
+          else
+            echo "::set-output name=branch_name::$branch_name"
+            echo "::set-output name=code_name::$code_name"
+          fi
+      - name: Print the values
+        run: |
+          #echo "Display_branch_name: $branch_name"
+          echo "Output_branchname: ${{ steps.extract-branch.outputs.branch_name }}"
+          echo "Output_codename: ${{ steps.extract-branch.outputs.code_name }}"
+ 
+      #- name: Checkout repo using branch name
+        #uses: actions/checkout@v3
+        #with:
+          #repository: ${{ github.event.inputs.code-repository }}
+          #ref: ${{ steps.extract-branch.outputs.branch_name }}
+          #token: ${{ secrets.PAT_TOKEN }}
+          #path: staging
+      #- name: List directory contents
+        #run: |
+          #cd staging
+          #ls -la
+      #- name: Download and update nsi.json with secrets
+        #env:
+          #DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          #DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          #prod_API_KEY: ${{ secrets.API_KEY }}
+        #run: ./Scripts/scriptupdate.ps1
+        #shell: pwsh
+
+      - name: Azure check
+        shell: pwsh
+        env:
+          CLIENTNAME: ${{ vars.CLIENTNAME }}
+        run: |
+          $CONFIGJSONBRANCH = "${{ steps.extract-branch.outputs.branch_name }}"
+          $CONFIGJSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
+          $concatoutput = "sb/$($CONFIGJSONBRANCH)/$($CONFIGJSONCODE)_encrypted.json"
+          Write-Output "$concatoutput"
+          $sharename = "$env:CLIENTNAME"
+          $filesharename = "$sharename+share"
+          Write-Output "$filesharename"
+       
 
       
  
