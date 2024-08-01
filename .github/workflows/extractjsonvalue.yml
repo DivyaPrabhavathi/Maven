@@ -1,4 +1,4 @@
-name: concAT
+name: TakingKeyfromJson
  
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
  
 jobs:
   update_json:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.extract-branch.outputs.branch_name }}
       code_name: ${{ steps.extract-branch.outputs.code_name }}
@@ -31,15 +31,13 @@ jobs:
       
       - name: check jq version
         run: |
-          $env:Path += ";C:\ProgramData\chocolatey\bin"
           jq --version
  
       - name: Extract branch name from JSON
         id: extract-branch
-        shell: powershell
-       
+        shell: bash
         run: |
-          $env:Path += ";C:\ProgramData\chocolatey\bin"
+         
           branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
           code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
@@ -55,7 +53,6 @@ jobs:
           #echo "Display_branch_name: $branch_name"
           echo "Output_branchname: ${{ steps.extract-branch.outputs.branch_name }}"
           echo "Output_codename: ${{ steps.extract-branch.outputs.code_name }}"
- 
       #- name: Checkout repo using branch name
         #uses: actions/checkout@v3
         #with:
