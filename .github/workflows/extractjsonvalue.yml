@@ -13,6 +13,7 @@ on:
 jobs:
   update_json:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
     outputs:
       branch_name: ${{ steps.extract-branch.outputs.branch_name }}
       code_name: ${{ steps.extract-branch.outputs.code_name }}
@@ -84,7 +85,7 @@ jobs:
           Write-Output "$concatoutput"
           $sharename = "$env:CLIENTNAME"
           $newvaluesname = "$env:newvalue"
-          $filesharename = "$sharename$newvaluesname"
+          $filesharename = "${sharename}Share"
           Write-Output "$filesharename"
        
 
