@@ -67,7 +67,7 @@ jobs:
          Write-Output "::set-output name=filesharename::$filesharename"
  
       - name: Copy file
-        shell: pwsh
+        shell: powershell
         run: |
           $concatvaluenew = "${{ steps.concat-value.outputs.concatvaluenew }}"
           $filepath = "${{ steps.concat-value.outputs.filepath }}"
