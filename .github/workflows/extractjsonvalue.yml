@@ -37,8 +37,9 @@ jobs:
       - name: Extract branch name from JSON
         id: extract-branch
         shell: bash
+       
         run: |
-         
+          $env:Path += ";C:\ProgramData\chocolatey\bin"
           branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
           code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
