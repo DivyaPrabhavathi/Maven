@@ -54,9 +54,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           ENV_NAME: ${{ secrets.ENV_NAME }} 
-        run: .\.github\Scripts\encrypt.ps1
+        run: .\.github\test\encrypt.ps1
         
       - name: Download and update nsi.json with secrets
-        run: .\.github\Scripts\decrypt.ps1
+        run: .\.github\test\decrypt.ps1
         
 
