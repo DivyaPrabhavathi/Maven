@@ -32,13 +32,13 @@ jobs:
    
           if ( -not "$branch_name" -or -not $code_name )
             {
-            write-output "One or more variable are empty
+            Write-Output "One or more variable are empty"
             exit 1
             }
           else
           {
-            write-output "::set-output name=branch_name::$branch_name"
-            write-output "::set-output name=code_name::$code_name"
+            Write-Output "::set-output name=branch_name::$branch_name"
+            Write-Output "::set-output name=code_name::$code_name"
           }
          
       - name: Print the values
