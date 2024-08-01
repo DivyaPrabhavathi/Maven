@@ -67,7 +67,9 @@ jobs:
          Write-Output "::set-output name=filesharename::$filesharename"
  
       - name: Copy file
-        shell: bash
+        shell: pwsh
         run: |
-         echo "Copying file from ${{ steps.concat-value.outputs.concatvaluenew }} to ${{ steps.concat-value.outputs.filepath }}"
-         cp ${{ steps.concat-value.outputs.concatvaluenew }} ${{ steps.concat-value.outputs.filepath }}
+          $concatvaluenew = "${{ steps.concat-value.outputs.concatvaluenew }}"
+          $filepath = "${{ steps.concat-value.outputs.filepath }}"
+          Write-Host "Copying file from $concatvaluenew to $filepath"
+          Copy-Item -Path $concatvaluenew -Destination $filepath -Force
