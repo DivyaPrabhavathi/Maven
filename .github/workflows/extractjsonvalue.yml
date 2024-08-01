@@ -53,7 +53,7 @@ jobs:
           $JSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
           $concatvalue = "sb/$($JSONBRANCH)/$($JSONCODE)_encrypted.json"
           $sharefile = "$env:CLIENTNAME"
-          $filesharename = "${sharenfile}Share"
+          $filesharename = "${sharefile}Share"
           Write-Output "$concatoutput"
           Write-Output "$filesharename"
        
