@@ -53,13 +53,12 @@ jobs:
           $JSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
           $concatvalue = "sb/$($JSONBRANCH)/$($JSONCODE)_encrypted.json"
           $concatvaluenew = "$($JSONCODE)_encrypted.json"
-          #$filepath = "Scripts/Jsonfile.json"
-          $JSONCODE | Out-File -FilePath $filepath
           $sharefile = "$env:CLIENTNAME"
           $filesharename = "${sharefile}Share"
           $filepath = "nsi/Jsonfile.json"
-          Write-Output "$concatoutput"
+          Write-Output "$concatvalue"
           Write-Output "$filesharename"
+          Write-Output "$concatvaluenew"
           
 
       
