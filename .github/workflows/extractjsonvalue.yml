@@ -62,6 +62,9 @@ jobs:
          $filesharename = "${sharefile}Share"
          
          $filepath = "nsi/$($JSONCODE).json"
+         Write-Output "$concatvalue"
+         Write-Output "$filesharename"
+         Write-Output "$concatvaluenew"
          Write-Output "::set-output name=concatvaluenew::$concatvaluenew"
          Write-Output "::set-output name=filepath::$filepath"
          Write-Output "::set-output name=concatvalue::$concatvalue"
