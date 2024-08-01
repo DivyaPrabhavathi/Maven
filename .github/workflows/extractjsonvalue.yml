@@ -30,13 +30,17 @@ jobs:
           branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
           code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
-          if [[ -z "$branch_name" || -z $code_name ]]; then
-            echo "No object with Phase=2 found in component.json"
+          if ( -not "$branch_name" -or -not $code_name )
+            {
+            write-output "One or more variable are empty
             exit 1
+            }
           else
-            echo "::set-output name=branch_name::$branch_name"
-            echo "::set-output name=code_name::$code_name"
-          fi
+          {
+            write-output "::set-output name=branch_name::$branch_name"
+            write-output "::set-output name=code_name::$code_name"
+          }
+         
       - name: Print the values
         run: |
           #echo "Display_branch_name: $branch_name"
