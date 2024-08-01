@@ -1,4 +1,4 @@
-name: TakingKeyfromJson
+name: Concat value
  
 on:
   workflow_dispatch:
