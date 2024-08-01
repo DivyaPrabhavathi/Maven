@@ -61,7 +61,6 @@ jobs:
          $sharefile = "$env:CLIENTNAME"
          $filesharename = "${sharefile}Share"
          $filesharenamenew = "$($sharefile)share
-         
          $filepath = "nsi/$($JSONCODE).json"
          Write-Output "$concatvalue"
          Write-Output "$filesharename"
