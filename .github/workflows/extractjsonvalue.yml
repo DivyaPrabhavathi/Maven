@@ -60,12 +60,7 @@ jobs:
          $concatvaluenew = "$($JSONCODE)_encrypted.json"
          $sharefile = "$env:CLIENTNAME"
          $filesharename = "${sharefile}Share"
-         $filesharenamenew = "$($sharefile)share
          $filepath = "nsi/$($JSONCODE).json"
-         Write-Output "$concatvalue"
-         Write-Output "$filesharename"
-         Write-Output "$concatvaluenew"
-         Write-Output "$filesharenamenew"
          Write-Output "::set-output name=concatvaluenew::$concatvaluenew"
          Write-Output "::set-output name=filepath::$filepath"
          Write-Output "::set-output name=concatvalue::$concatvalue"
