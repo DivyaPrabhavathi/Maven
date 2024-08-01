@@ -12,7 +12,7 @@ on:
  
 jobs:
   update_json:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: ${{ github.event.inputs.environment }}
     outputs:
       branch_name: ${{ steps.extract-branch.outputs.branch_name }}
