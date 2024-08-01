@@ -27,10 +27,10 @@ jobs:
         shell: powershell
         run: |
           $env:Path += ";C:\ProgramData\chocolatey\bin"
-          branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
-          code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
+          $branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          $code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
    
-          if ( -not "$branch_name" -or -not $code_name )
+          if (-not "$branch_name" -or -not "$code_name" )
             {
             Write-Output "One or more variable are empty"
             exit 1
