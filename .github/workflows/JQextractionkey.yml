@@ -56,7 +56,6 @@ jobs:
           ENV_NAME: ${{ secrets.ENV_NAME }} 
         run: .\.github\test\encrypt.ps1
         
-      - name: Download and update nsi.json with secrets
-        run: .\.github\test\decrypt.ps1
+      
         
 
