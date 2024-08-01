@@ -49,7 +49,6 @@ jobs:
      
 
       - name: Concat value
-        id: concat-value
         shell: powershell
         env:
          CLIENTNAME: ${{ vars.CLIENTNAME }}
@@ -61,15 +60,5 @@ jobs:
          $sharefile = "$env:CLIENTNAME"
          $filesharename = "${sharefile}Share"
          $filepath = "nsi/$($JSONCODE).json"
-         Write-Output "::set-output name=concatvaluenew::$concatvaluenew"
-         Write-Output "::set-output name=filepath::$filepath"
-         Write-Output "::set-output name=concatvalue::$concatvalue"
-         Write-Output "::set-output name=filesharename::$filesharename"
- 
-      - name: Copy file
-        shell: powershell
-        run: |
-          $concatvaluenew = "${{ steps.concat-value.outputs.concatvaluenew }}"
-          $filepath = "${{ steps.concat-value.outputs.filepath }}"
-          Write-Host "Copying file from $concatvaluenew to $filepath"
-          Copy-Item -Path $concatvaluenew -Destination $filepath -Force
+         Write-Host "Copying file from $concatvaluenew to $filepath"
+         Copy-Item -Path $concatvaluenew -Destination $filepath -Force
