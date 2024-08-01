@@ -83,7 +83,8 @@ jobs:
           $concatoutput = "sb/$($CONFIGJSONBRANCH)/$($CONFIGJSONCODE)_encrypted.json"
           Write-Output "$concatoutput"
           $sharename = "$env:CLIENTNAME"
-          $filesharename = "($sharename)($newvalue)"
+          $newvaluesname = "$env:newvalue"
+          $filesharename = "$sharename$newvaluesname"
           Write-Output "$filesharename"
        
 
