@@ -1,0 +1,69 @@
+name: Concat value
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to use'
+        required: true
+      code-repository:
+        description: 'Provide Repo name'
+        required: true
+ 
+jobs:
+  update_json:
+    runs-on: self-hosted
+    environment: ${{ github.event.inputs.environment }}
+    outputs:
+      branch_name: ${{ steps.extract-branch.outputs.branch_name }}
+      code_name: ${{ steps.extract-branch.outputs.code_name }}
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Extract branch name from JSON
+        id: extract-branch
+        shell: powershell
+        run: |
+          $env:Path += ";C:\ProgramData\chocolatey\bin"
+          $branch_name=$(jq -r '.[] | select(.Phase == 2) | .Branch' component.json)
+          $code_name=$(jq -r '.[] | select(.Phase == 2) | .code' component.json)
+   
+          if (-not $branch_name -or -not $code_name)
+            {
+            Write-Output "One or more variable are empty"
+            exit 1
+            }
+          else
+          {
+            Write-Output "::set-output name=branch_name::$branch_name"
+            Write-Output "::set-output name=code_name::$code_name"
+          }
+         
+      - name: Print the values
+        run: |
+          #echo "Display_branch_name: $branch_name"
+          echo "Output_branchname: ${{ steps.extract-branch.outputs.branch_name }}"
+          echo "Output_codename: ${{ steps.extract-branch.outputs.code_name }}"
+     
+
+      - name: Concat value
+        shell: powershell
+        env:
+         CLIENTNAME: ${{ vars.CLIENTNAME }}
+        run: |
+         $JSONBRANCH = "${{ steps.extract-branch.outputs.branch_name }}"
+         $JSONCODE = "${{ steps.extract-branch.outputs.code_name }}"
+         $concatvalue = "sb/$($JSONBRANCH)/$($JSONCODE)_encrypted.json"
+         $concatvaluenew = "$($JSONCODE)_encrypted.json"
+         $sharefile = "$env:CLIENTNAME"
+         $filesharename = "${sharefile}Share"
+         $filepath = "nsi/$($JSONCODE).json"
+         Write-Host "Copying file from $concatvaluenew to $filepath"
+         Copy-Item -Path $concatvaluenew -Destination $filepath -Force
+
+         Compress-Archive -Path .\nsi -DestinationPath .\zipped-folder.zip
+        
+ 
+      
