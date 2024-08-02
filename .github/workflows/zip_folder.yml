@@ -1,4 +1,4 @@
-name: Concat value
+name: Zip value
  
 on:
   workflow_dispatch:
