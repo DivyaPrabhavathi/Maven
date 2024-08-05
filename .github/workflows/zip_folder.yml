@@ -60,10 +60,12 @@ jobs:
          $sharefile = "$env:CLIENTNAME"
          $filesharename = "${sharefile}Share"
          $filepath = "nsi/$($JSONCODE).json"
+         $zipfilepath = "nsi"
+         $zipedfilepath = "zipped-folder.zip"
          Write-Host "Copying file from $concatvaluenew to $filepath"
          Copy-Item -Path $concatvaluenew -Destination $filepath -Force
 
-         Compress-Archive -Path .\nsi -DestinationPath .\zipped-folder.zip
+         Compress-Archive -Path $zipfilepath -DestinationPath  $zipedfilepath
         
  
       
