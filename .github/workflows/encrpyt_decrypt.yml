@@ -40,10 +40,29 @@ jobs:
             Write-Output "::set-output name=branch_name::$branch_name"
             Write-Output "::set-output name=code_name::$code_name"
           }
-         
+
+      - name: Using workflow from another repo
+        uses: actions/checkout@v2  # Use v2 for consistency unless v4 has specific features you need
+        #uses: Bhacaz/checkout-files@v2
+       
+        with:
+          repository: ${{ github.event.inputs.code-repository }}
+          ref: ${{ github.event.inputs.code-reference }}
+          token: ${{ secrets.PAT_TOKEN }}
+          path: staging
+
+       
       - name: Print the values
         run: |
           #echo "Display_branch_name: $branch_name"
           echo "Output_branchname: ${{ steps.extract-branch.outputs.branch_name }}"
           echo "Output_codename: ${{ steps.extract-branch.outputs.code_name }}"
+
+      - name: Download and update nsi.json with secrets
+        #working-directory: staging\nsi.json
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          prod_Env_NAME: ${{ secrets.ENV_NAME }}
+          run: .\.github\Test\encrypt_decrypt.ps1
      
