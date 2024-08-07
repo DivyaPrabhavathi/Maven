@@ -1,4 +1,4 @@
-name: Concat value
+name: encrypt_decrypt value
  
 on:
   workflow_dispatch:
