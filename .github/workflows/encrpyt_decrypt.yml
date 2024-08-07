@@ -65,4 +65,9 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           prod_Env_NAME: ${{ secrets.ENV_NAME }}
         run: .\.github\test\devencrypt.ps1
+
+      - name: decrypt the value 
+        
+        run: .\.github\Test\devdecrypt.ps1
+
      
