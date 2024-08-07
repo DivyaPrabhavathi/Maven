@@ -64,5 +64,5 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           prod_Env_NAME: ${{ secrets.ENV_NAME }}
-        run: .\.github\Test\encrypt_decrypt.ps1
+        run: .\.github\Test\devencrypt.ps1
      
