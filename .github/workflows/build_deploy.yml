@@ -1,5 +1,4 @@
-name: Build and Deploy Java Application to Tomcat
-
+name: Build and Deploy Java A
 on:
   workflow_dispatch:
 
