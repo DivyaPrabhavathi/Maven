@@ -5,8 +5,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: [self-hosted, windows]  # Use the appropriate label for your self-hosted runner
-
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
