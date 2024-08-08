@@ -29,7 +29,9 @@ jobs:
        
       - name: Deploy to Tomcat
         run: |
-          Copy-Item  staging\*.war "C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps\"
+          Copy-Item -Path staging\*.war -Destination "C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps\"
+
+          #Copy-Item  staging\*.war "C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps\"
       
 
           
