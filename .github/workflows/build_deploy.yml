@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          cache: maven'  # Specify the JDK version
+          cache: 'maven'  # Specify the JDK version
 
       - name: Build with new Maven
 
