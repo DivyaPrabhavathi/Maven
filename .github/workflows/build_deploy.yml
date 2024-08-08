@@ -23,7 +23,11 @@ jobs:
 
       - name: Build with new Maven
 
-        run: mvn -B package --file pom.xml  # Build the application and create a WAR file
+        run: mvn -B package --file pom.xml 
+      - name: Creates stagin directory and copy .war
+        run: |
+          mkdir staging
+          cp target/*.war staging/# Build the application and create a WAR file
 
       
 
