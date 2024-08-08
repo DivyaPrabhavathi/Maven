@@ -26,6 +26,12 @@ jobs:
          New-Item -ItemType Directory -Path staging -Force
          Copy-Item -Path target\*.war -Destination staging\
 
+       
+      - name: Deploy to Tomcat
+        run: |
+       
+          # Deploy WAR file to Tomcat
+          copy staging\*.war C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps
       
 
           
