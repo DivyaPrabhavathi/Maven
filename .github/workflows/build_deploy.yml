@@ -13,7 +13,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    if: ( ${{ inputs.environment == 'Dev' }} ||  ( ${{ inputs.environment == 'Prod' }} && ${{ inputs.code-repository == 'Divyaprabhavathi/dev' }} ) )
+    #if: ( ${{ inputs.environment == 'Dev' }} ||  ( ${{ inputs.environment == 'Prod' }} && ${{ inputs.code-repository == 'Divyaprabhavathi/dev' }} ) )
+    if: ${{ github.event.inputs.environment == 'Dev' || (github.event.inputs.environment == 'Prod' && github.event.inputs.code-repository == 'Divyaprabhavathi/dev') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
