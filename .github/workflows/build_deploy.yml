@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    if: ${{ inputs.environment == Dev }}
+    if: ${{ inputs.environment == 'Dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
