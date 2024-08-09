@@ -5,11 +5,15 @@ on:
     inputs:
       environment:
         description: 'Environment to use'
+      code-repository:
+        description: 'Provide Repo name'
+        required: true
+    
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    if: ${{ inputs.environment == 'Dev' }}
+    if: ${{ inputs.environment == 'Dev' }} ||  ( ${{ inputs.environment == 'Prod' }} && ${{ inputs.code-repository == 'Divyaprabhavathi/dev' }} )
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,6 +25,8 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: 'maven'  # Specify the JDK version
+
+      
 
       - name: Build with new Maven
 
