@@ -13,7 +13,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    if: ${{ inputs.environment == 'Dev' }} ||  ( ${{ inputs.environment == 'Prod' }} && ${{ inputs.code-repository == 'Divyaprabhavathi/dev' }} )
+    if: ( ${{ inputs.environment == 'Dev' }} ||  ( ${{ inputs.environment == 'Prod' }} && ${{ inputs.code-repository == 'Divyaprabhavathi/dev' }} ) )
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
