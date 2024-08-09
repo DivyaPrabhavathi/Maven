@@ -2,10 +2,14 @@ name: Build and Deploy Java Application to Tomcat
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to use'
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
+    if: ${{ inputs.environmnet = dev}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,11 +31,7 @@ jobs:
          Copy-Item -Path target\*.war -Destination staging\
 
        
-      - name: Deploy to Tomcat
-        run: |
-          Copy-Item -Path staging\*.war -Destination "C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps\"
-
-          #Copy-Item  staging\*.war "C:\Host\Apache Software Foundation\Tomcat 10.1.25\webapps\"
+     
       
 
           
